@@ -6,18 +6,20 @@ Move files with a specific format
 
 You can run this in terminal and organize your file by follow these steps:
 
-1. ***Add executable permission***
+1. **Add executable permission**
 ```bash
 chmod +x fileHandling.py
 ```
 
-2. ***Link the file***
+2. **Link the file**
 ```bash
 ln -s /path/to/your/code/fileHandling.py ~/.local/bin/organize
 ```
 
-3. ***Refresh Terminal***
+3. **Refresh Terminal**
+
 Refresh your terminal then run this command:
+
 ```bash
 organize
 ```
