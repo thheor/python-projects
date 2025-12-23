@@ -8,3 +8,5 @@ Here are the list of projects:
 2. Fun Fact Website
 3. Hangman Game
 4. Number Guessing
+5. Web Scraping
+6. Decimal to Binary

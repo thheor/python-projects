@@ -4,6 +4,16 @@ Move files with a specific format
 
 ## Run in Terminal
 
+## Run in Current Directory
+
+Run this command in terminal to move files in your current directory
+
+```bash
+python fileHandling.py
+```
+
+## Run Program Globally
+
 You can run this in terminal and organize your file by follow these steps:
 
 1. **Add executable permission**
