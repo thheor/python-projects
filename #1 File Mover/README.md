@@ -28,10 +28,22 @@ ln -s /path/to/your/code/fileHandling.py ~/.local/bin/organize
 
 3. **Refresh Terminal**
 
-Refresh your terminal then run this command:
+Refresh your terminal
 
+4. **Run Command**
 ```bash
 organize
+```
+or
+```bash
+organize [format] [folder]
+```
+
+NOTE: Run this command for help
+```bash
+organize --help
+#or
+organize --h
 ```
 
 Now you can run this program wherever its directory is.
