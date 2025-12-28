@@ -25,7 +25,7 @@ def getListID(cursor, id):
     
     return data
 
-def login(cursor):
+def login(cnx, cursor):
     print('---LOGIN---')
     while True:
         username = str(input('Username: '))
@@ -34,18 +34,35 @@ def login(cursor):
         rows = cursor.fetchall()
         if(not rows):
             print('there is no matching username')
+            wantsReg = input('Do you want to register?\n[Y/n]: ')
+            if wantsReg == 'Y' or wantsReg == 'y':
+                register(cnx, cursor)
         else:
             for row in rows[0]:
                 id = row
-                print(f'Your id: {id}')
 
             return id
+
+def register(cnx, cursor):
+    print('---REGISTER---')
+
+    username = str(input('Create username: '))
+
+    try:
+        cursor.execute(f'INSERT INTO user (name) VALUES (\'{username}\')')
+        print('Register successfully!')
+        cnx.commit()
+        login(cnx, cursor)
+    except mysql.connector.Error as err:
+        print(f'Ups there is an error: {err}')
+        exit()
 
 if __name__ == '__main__':
     cnx = connectDB()
     cursor = cnx.cursor()
 
-    id = login(cursor)
+    id = login(cnx, cursor)
+    print(f'your id is {id}')
 
     while True:
         print('---TODO APP---')
