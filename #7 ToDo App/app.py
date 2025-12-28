@@ -15,12 +15,12 @@ def connectDB():
 
     return cnx
 
-def getData(cursor, id):
-    cursor.execute(f'SELECT item FROM list WHERE user_id = {id}')
+def getListID(cursor, id):
+    cursor.execute(f'SELECT id, item FROM list WHERE user_id = {id}')
 
     data = []
     for fields in cursor:
-        print(f'{cursor.rowcount}. {fields[0]}')
+        print(f'{cursor.rowcount}. {fields[1]}')
         data.append(fields[0])
     
     return data
@@ -69,18 +69,18 @@ if __name__ == '__main__':
 
             case 2:
                 print('---READ LIST---')
-                getData(cursor, id)
+                getListID(cursor, id)
                 gotoMenu = input('Go back to Main Menu?\n[Y/n]: ')
                 if gotoMenu == 'n' or gotoMenu == 'N':
                     break
             case 3:
                 print('---UPDATE LIST---')
                 while True:
-                    data = getData(cursor, id)
+                    listId = getListID(cursor, id)
                     numList = int(input('Enter list\'s number do you want to update: '))
                     updateList = input('Enter update list: ')
 
-                    cursor.execute(f'UPDATE list SET item = \'{updateList}\' WHERE user_id = {id} AND item = \'{data[numList - 1]}\'')
+                    cursor.execute(f'UPDATE list SET item = \'{updateList}\' WHERE id = {listId[numList - 1]}')
                     cnx.commit()
 
                     gotoMenu = input('Go back to Main Menu?\n[Y/n]: ')
@@ -88,11 +88,12 @@ if __name__ == '__main__':
                         break
             case 4:
                 print('---DELETE LIST---')
-                data = getData(cursor, id)
+                listId = getListID(cursor, id)
                 numList = int(input('Enter list\'s number do you want to delete: '))
                 try:
-                    cursor.execute(f'DELETE FROM list WHERE item = \'{data[numList - 1]}\' and user_id = {id}')
+                    cursor.execute(f'DELETE FROM list WHERE id = {listId[numList - 1]}')
                     print('Delete record successfull')
+                    cnx.commit()
                 except mysql.connector.Error as err:
                     print(f'Delete record ERROR: {err}')
             case 5:
