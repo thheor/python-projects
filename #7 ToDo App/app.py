@@ -15,11 +15,15 @@ def connectDB():
 
     return cnx
 
-def getListIndex(cursor, id):
+def getData(cursor, id):
     cursor.execute(f'SELECT item FROM list WHERE user_id = {id}')
 
-    # for fields in cursor:
-        # for data in 
+    data = []
+    for fields in cursor:
+        print(f'{cursor.rowcount}. {fields[0]}')
+        data.append(fields[0])
+    
+    return data
 
 def login(cursor):
     print('---LOGIN---')
@@ -42,9 +46,7 @@ if __name__ == '__main__':
     cursor = cnx.cursor()
 
     id = login(cursor)
-    
-    getListIndex(cursor, id)
-    exit()
+
     while True:
         print('---TODO APP---')
         print('1. Add List')
@@ -67,30 +69,18 @@ if __name__ == '__main__':
 
             case 2:
                 print('---READ LIST---')
-                cursor.execute(f'SELECT item FROM list WHERE user_id = {id}')
-                i = 1
-                for row in cursor:
-                    for item in row:
-                        print(f'{i}. {item}')
-                        i += 1
+                getData(cursor, id)
                 gotoMenu = input('Go back to Main Menu?\n[Y/n]: ')
                 if gotoMenu == 'n' or gotoMenu == 'N':
                     break
             case 3:
                 print('---UPDATE LIST---')
                 while True:
-                    cursor.execute(f'SELECT item FROM list WHERE user_id = {id}')
-                    i = 1
-                    for row in cursor:
-                        for item in row:
-                            print(f'{i}. {item}')
-                            i += 1
-
+                    data = getData(cursor, id)
                     numList = int(input('Enter list\'s number do you want to update: '))
                     updateList = input('Enter update list: ')
 
-
-                    cursor.execute(f'UPDATE list SET item = \'{updateList}\' WHERE user_id = {id}')
+                    cursor.execute(f'UPDATE list SET item = \'{updateList}\' WHERE user_id = {id} AND item = \'{data[numList - 1]}\'')
                     cnx.commit()
 
                     gotoMenu = input('Go back to Main Menu?\n[Y/n]: ')
@@ -98,7 +88,13 @@ if __name__ == '__main__':
                         break
             case 4:
                 print('---DELETE LIST---')
-                item = str(input('Enter new list: '))
+                data = getData(cursor, id)
+                numList = int(input('Enter list\'s number do you want to delete: '))
+                try:
+                    cursor.execute(f'DELETE FROM list WHERE item = \'{data[numList - 1]}\' and user_id = {id}')
+                    print('Delete record successfull')
+                except mysql.connector.Error as err:
+                    print(f'Delete record ERROR: {err}')
             case 5:
                 print('Bye')
                 break
